@@ -1,10 +1,12 @@
 package Task.dao;
 
 import Task.model.User;
+import org.hibernate.SessionFactory;
 
 import java.util.List;
 
 public interface UserDao {
+
     void createUsersTable();
 
     void dropUsersTable();
