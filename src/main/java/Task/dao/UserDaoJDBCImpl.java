@@ -3,16 +3,16 @@ package Task.dao;
 import Task.model.User;
 import Task.util.Util;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    Connection connection;
+    private Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
-       connection = Util.getConnection();
     }
 
     public void createUsersTable() {
@@ -47,11 +47,12 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) {
+    public void saveUser(String name, String lastName, byte age) throws SQLException {
 
         String SQL = "INSERT mydbtest.users(name, lastName, age) VALUES(?, ?, ?)";
 
         try {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement =  connection.prepareStatement(SQL);
 
             System.out.println("Пользователь " + name +
@@ -64,22 +65,31 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.execute();
 
         } catch (SQLException throwables) {
+            connection.rollback();
             throwables.printStackTrace();
+        }
+        finally {
+            connection.setAutoCommit(true);
         }
     }
 
-    public void removeUserById(long id) {
+    public void removeUserById(long id) throws SQLException {
 
         String SQL ="delete from mydbtest.users where id = ?";
         try {
+            connection.setAutoCommit(false);
             PreparedStatement preparedStatement = connection.prepareStatement(SQL);
 
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
             preparedStatement.close();
-
+            connection.commit();
         } catch (SQLException throwables) {
+            connection.rollback();
             throwables.printStackTrace();
+        }
+        finally {
+            connection.setAutoCommit(true);
         }
         System.out.println("Пользователь c Id: " + id + " удалён");
     }

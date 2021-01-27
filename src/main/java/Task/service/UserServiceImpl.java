@@ -1,13 +1,11 @@
 package Task.service;
 
 import Task.dao.UserDaoHibernateImpl;
-import Task.dao.UserDaoJDBCImpl;
 import Task.model.User;
 
 import java.util.List;
 
-public class UserServiceImpl implements UserService  {
-
+public class UserServiceImpl implements UserService {
     UserDaoHibernateImpl userDaoHibernate = new UserDaoHibernateImpl();
 
     public void createUsersTable() {
@@ -30,7 +28,7 @@ public class UserServiceImpl implements UserService  {
         return userDaoHibernate.getAllUsers();
     }
 
-    public void cleanUsersTable() {
+    public void cleanUsersTable(){
         userDaoHibernate.cleanUsersTable();
     }
 }
