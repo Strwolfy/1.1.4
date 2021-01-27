@@ -109,6 +109,7 @@ public class UserDaoHibernateImpl implements UserDao {
             session.beginTransaction();
             List<User> list = (List<User>) session.createQuery("from User").list();
             list.forEach(System.out::println);
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
 
